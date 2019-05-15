@@ -15,7 +15,7 @@ cond_1 () {
 	mv $hasil ./ta-zal/hasil/$hasil
 	fi
 	cd './ta-zal/'
-	./git pull origin
+	git pull origin
 	cp ./mc-twoenbs.cc ../scratch/
 	cd '..'
 	./waf --run $locScript
