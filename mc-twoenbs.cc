@@ -310,11 +310,13 @@ main (int argc, char *argv[])
   bool fixedTti = false;
   unsigned symPerSf = 24;
   double sfPeriod = 100.0;
+  std::string protocol = "TcpNewReno"; //Default variable TCP yang digunakan adalah NewReno
 
   std::list<Box>  m_previousBlocks;
 
   // Command line arguments
   CommandLine cmd;
+  cmd.AddValue("protocol", "TCP protocol", protocol); //Penentuan jenis dari TCP yang hendak digunakan
   cmd.Parse (argc, argv);
 
   UintegerValue uintegerValue;
@@ -425,6 +427,20 @@ main (int argc, char *argv[])
   strftime (buffer,80,"%d_%m_%Y_%I_%M_%S",timeinfo);
   std::string time_str (buffer);
 
+  if(protocol == "TcpNewReno")
+  {
+    Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TcpNewReno::GetTypeId ()));
+  }
+  else if (protocol == "TcpCubic")
+  {
+    Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TcpCubic::GetTypeId ()));
+  }
+  else
+  {
+    std::cout<<protocol<<" Unkown protocol.\n";
+		return 1;
+  }
+  
   Config::SetDefault ("ns3::MmWaveHelper::RlcAmEnabled", BooleanValue (rlcAmEnabled));
   Config::SetDefault ("ns3::MmWaveHelper::HarqEnabled", BooleanValue (harqEnabled));
   Config::SetDefault ("ns3::MmWaveFlexTtiMacScheduler::HarqEnabled", BooleanValue (harqEnabled));
