@@ -12,11 +12,7 @@ fi
 
 # Function 1: update script dari git dan jalankan program
 cond_1 () {
-	if [ -f "$hasil" ];then
-	mv $hasil ./ta-zal/hasil/
-	fi
 	cd './ta-zal/'
-	git pull origin
 	cp ./mc-twoenbs.cc ../scratch/
 	cd '..'
 	./waf --run "$locScript --protocol=\'$tcp\'"
@@ -27,25 +23,35 @@ cond_2 () {
 	./waf --run $locScript
 }
 
+# Function 3: update git
+cond_3 () {
+	git pull origin
+}
+
 # Main
 case "$1" in
-	uprun)
+	mvrun)
 		cond_1
 		;;
 	run)
 		cond_2
 		;;
+	update)
+		cond_3
+		;;
 	*)
-		echo $"Usage: $0 {uprun|run}"
-		echo $"\n"
+		echo $"Usage: $0 {mvrun|run|update} {newreno|cubic}"
+		echo $" "
 		exit
 esac
 
 case "$2" in
 	newreno)
 		tcp="TcpNewReno"
+		mv $hasil ./ta-zal/hasil/newreno/
 		;;
 	cubic)
 		tcp="TcpCubic"
+		mv $hasil ./ta-zal/hasil/cubic/
 		;;
 esac
